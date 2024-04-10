@@ -5,6 +5,8 @@ import {
   hostRevealDoor,
   reveal,
   newGame,
+  selectContestantDoorSelected,
+  selectPrizeDoor,
 } from "../../state/gameSlice";
 import { useAppDispatch, useAppSelector } from "../../state/hooks";
 import Door from "./Door";
@@ -13,6 +15,8 @@ const Game = () => {
   const dispatch = useAppDispatch();
 
   const gameStep = useAppSelector(selectGameStep);
+  const contestantDoorSelect = useAppSelector(selectContestantDoorSelected);
+  const prizeDoor = useAppSelector(selectPrizeDoor);
 
   let stepElements: ReactNode = null;
 
@@ -21,7 +25,9 @@ const Game = () => {
   if (gameStep === GAME_STEPS.HOST_REVEAL) {
     msg = "The host will reveal a non-prize door.";
     stepElements = (
-      <button onClick={() => dispatch(hostRevealDoor())}>Show Me</button>
+      <button onClick={() => dispatch(hostRevealDoor())}>
+        Reveal The Door
+      </button>
     );
   }
   if (gameStep === GAME_STEPS.CONTESTANT_SWITCH)
@@ -33,9 +39,9 @@ const Game = () => {
     );
   }
   if (gameStep === GAME_STEPS.DONE) {
-    msg = "The game is over.";
+    msg = `The game is over. ${prizeDoor === contestantDoorSelect ? "You won!" : "You lost."}`;
     stepElements = (
-      <button onClick={() => dispatch(newGame())}>Play Again</button>
+      <button onClick={() => dispatch(newGame())}>Play Again?</button>
     );
   }
   return (
