@@ -3,6 +3,16 @@ import type { RootState } from "./store";
 
 export type PrizeDoor = 1 | 2 | 3;
 
+type GameStep = 0 | 1 | 2 | 3 | 4;
+
+export const GAME_STEPS = {
+  CONTESTANT_CHOOSE: 0 as GameStep,
+  HOST_REVEAL: 1 as GameStep, // host hasn't revealed yet
+  CONTESTANT_SWITCH: 2 as GameStep, // contestant is going to choose to switch
+  DRAMATIC_REVEAL: 3 as GameStep,
+  DONE: 4 as GameStep,
+};
+
 const doorOptions = [1, 2, 3] as PrizeDoor[];
 
 const getRandomPrizeDoor = () => {
@@ -18,6 +28,7 @@ interface GameState {
   contestantDoorSelected: PrizeDoor | null;
   doorHostRevealed: PrizeDoor | null;
   contestantSwitch: boolean | null;
+  reveal: boolean;
 }
 
 const initialState: GameState = {
@@ -25,6 +36,7 @@ const initialState: GameState = {
   contestantDoorSelected: null,
   doorHostRevealed: null,
   contestantSwitch: null,
+  reveal: false,
 };
 
 export const gameSlice = createSlice({
@@ -59,11 +71,15 @@ export const gameSlice = createSlice({
       }
       state.contestantSwitch = action.payload;
     },
+    reveal: (state) => {
+      state.reveal = true;
+    },
     newGame: (state) => {
       state.contestantDoorSelected = null;
       state.doorHostRevealed = null;
       state.contestantSwitch = null;
       state.prizeDoor = getRandomPrizeDoor();
+      state.reveal = false;
     },
   },
 });
@@ -72,9 +88,19 @@ export const {
   contestantChooseDoor,
   hostRevealDoor,
   contestantDecideSwitch,
+  reveal,
   newGame,
 } = gameSlice.actions;
 
+export const selectGameStep = (state: RootState) => {
+  const { contestantDoorSelected, doorHostRevealed, contestantSwitch, reveal } =
+    state.game;
+  if (contestantDoorSelected === null) return GAME_STEPS.CONTESTANT_CHOOSE;
+  if (doorHostRevealed === null) return GAME_STEPS.HOST_REVEAL;
+  if (contestantSwitch === null) return GAME_STEPS.CONTESTANT_SWITCH;
+  if (!reveal) return GAME_STEPS.DRAMATIC_REVEAL;
+  return GAME_STEPS.DONE;
+};
 export const selectContestantDoorSelected = (state: RootState) => {
   const { contestantDoorSelected, doorHostRevealed, contestantSwitch } =
     state.game;

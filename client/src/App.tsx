@@ -19,6 +19,7 @@ function App() {
         There is an optimal choice. You should always switch. But it's hard to
         understand why. So instead of explaining it, let's see it.
       </p>
+      <h1>The Game</h1>
       <Game />
     </div>
   );
