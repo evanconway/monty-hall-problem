@@ -15,7 +15,7 @@ export const GAME_STEPS = {
 
 const doorOptions = [1, 2, 3] as PrizeDoor[];
 
-const getRandomPrizeDoor = () => {
+export const getRandomPrizeDoor = () => {
   return (Math.floor(Math.random() * 3) + 1) as PrizeDoor;
 };
 

@@ -46,7 +46,7 @@ const Game = () => {
   }
   return (
     <div>
-      <div style={{ minHeight: "100px" }}>
+      <div style={{ minHeight: "60px" }}>
         <p>{msg}</p>
         {stepElements}
       </div>
