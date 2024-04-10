@@ -31,7 +31,13 @@ const Door = ({ doorNumber }: DoorProps) => {
     gameStep === GAME_STEPS.DONE || hostRevealed === doorNumber;
 
   return (
-    <div style={{ border: selected ? "1px red solid" : "", padding: "2em" }}>
+    <div
+      style={{
+        border: `2px ${selected ? "red" : ""} solid`,
+        padding: "2em",
+        margin: "2em",
+      }}
+    >
       <div style={{ fontSize: "4em" }}>{doorNumber}</div>
       <div style={{ fontSize: "5em" }}>
         {isRevealed ? (prizeDoor === doorNumber ? "$" : ".") : "?"}

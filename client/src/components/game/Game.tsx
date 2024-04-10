@@ -40,11 +40,11 @@ const Game = () => {
   }
   return (
     <div>
-      <div>
+      <div style={{ minHeight: "100px" }}>
         <p>{msg}</p>
         {stepElements}
       </div>
-      <div style={{ display: "flex" }}>
+      <div style={{ display: "flex", justifyContent: "center" }}>
         <Door doorNumber={1} />
         <Door doorNumber={2} />
         <Door doorNumber={3} />

@@ -2,7 +2,7 @@ import Game from "./components/game/Game";
 
 function App() {
   return (
-    <div>
+    <div style={{ maxWidth: "800px", margin: "0 auto" }}>
       <h1>The problem</h1>
       <p>
         The Monty Hall problem comes from a game show. The contestent is shown 3
