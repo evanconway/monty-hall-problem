@@ -4,6 +4,7 @@ import {
   GAME_STEPS,
   hostRevealDoor,
   reveal,
+  newGame,
 } from "../../state/gameSlice";
 import { useAppDispatch, useAppSelector } from "../../state/hooks";
 import Door from "./Door";
@@ -31,7 +32,12 @@ const Game = () => {
       <button onClick={() => dispatch(reveal())}>Show me the prize!</button>
     );
   }
-  if (gameStep === GAME_STEPS.DONE) msg = "The game is over.";
+  if (gameStep === GAME_STEPS.DONE) {
+    msg = "The game is over.";
+    stepElements = (
+      <button onClick={() => dispatch(newGame())}>Play Again</button>
+    );
+  }
   return (
     <div>
       <div>
