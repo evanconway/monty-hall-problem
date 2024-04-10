@@ -1,3 +1,5 @@
+import Game from "./components/game/Game";
+
 function App() {
   return (
     <div>
@@ -17,6 +19,7 @@ function App() {
         There is an optimal choice. You should always switch. But it's hard to
         understand why. So instead of explaining it, let's see it.
       </p>
+      <Game />
     </div>
   );
 }

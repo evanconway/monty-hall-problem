@@ -1,7 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "./store";
 
-type PrizeDoor = 1 | 2 | 3;
+export type PrizeDoor = 1 | 2 | 3;
+
+const doorOptions = [1, 2, 3] as PrizeDoor[];
 
 const getRandomPrizeDoor = () => {
   return (Math.floor(Math.random() * 3) + 1) as PrizeDoor;
@@ -43,7 +45,7 @@ export const gameSlice = createSlice({
           "host tried to reveal door before contestant had chosen door",
         );
       }
-      const options = ([1, 2, 3] as PrizeDoor[]).filter(
+      const options = doorOptions.filter(
         (o) => o != state.contestantDoorSelected && o != state.prizeDoor,
       );
       state.doorHostRevealed =
@@ -73,9 +75,19 @@ export const {
   newGame,
 } = gameSlice.actions;
 
-// Other code such as selectors can use the imported `RootState` type
-export const selectContestantDoorSelected = (state: RootState) =>
-  state.game.contestantDoorSelected;
+export const selectContestantDoorSelected = (state: RootState) => {
+  const { contestantDoorSelected, doorHostRevealed, contestantSwitch } =
+    state.game;
+  if (contestantDoorSelected === null) return null;
+  if (doorHostRevealed === null || contestantSwitch === null)
+    return contestantDoorSelected;
+  if (contestantSwitch === false) return contestantDoorSelected;
+  // return remaining door
+  const finalOption = doorOptions.filter(
+    (o) => o !== contestantDoorSelected && o !== doorHostRevealed,
+  )[0];
+  return finalOption;
+};
 export const selectHostDoorRevealed = (state: RootState) =>
   state.game.doorHostRevealed;
 export const selectContestantSwitched = (state: RootState) =>
