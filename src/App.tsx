@@ -43,6 +43,11 @@ function App() {
         </p>
       </section>
       <AutoPlayer />
+      <footer>
+        <p>
+          by <a href="https://evanconway.github.io/">Evan Conway</a>
+        </p>
+      </footer>
     </div>
   );
 }
