@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { contestantChooseDoor, getRandomPrizeDoor } from "../state/gameSlice";
+import {
+  contestantChooseDoor,
+  contestantDecideSwitch,
+  getRandomPrizeDoor,
+  hostRevealDoor,
+  newGame,
+  reveal,
+} from "../state/gameSlice";
 import { useAppDispatch } from "../state/hooks";
 
 const AutoPlayer = () => {
@@ -9,9 +16,23 @@ const AutoPlayer = () => {
   const [alwaysSwitch, setAlwaysSwitch] = useState(true);
 
   const playGamesAuto = () => {
+    const timer = 500;
     setPlaying(true);
     const randomChoice = getRandomPrizeDoor();
     dispatch(contestantChooseDoor(randomChoice));
+    setTimeout(() => {
+      dispatch(hostRevealDoor());
+      setTimeout(() => {
+        dispatch(contestantDecideSwitch(alwaysSwitch));
+        setTimeout(() => {
+          dispatch(reveal());
+          setTimeout(() => {
+            dispatch(newGame());
+            setPlaying(false);
+          }, timer);
+        }, timer);
+      }, timer);
+    }, timer);
   };
 
   return (
