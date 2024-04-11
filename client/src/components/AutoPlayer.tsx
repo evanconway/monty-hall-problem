@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   MontyHall,
   montyHallGetContestantDoorChoice,
@@ -11,6 +11,7 @@ const AutoPlayer = () => {
   const [winLoss, setWinLoss] = useState({ win: 0, lose: 0 });
   const [alwaysSwitch, setAlwaysSwitch] = useState(true);
   const [autoTimeoutId, setAutoTimeoutId] = useState<number | null>(null);
+  const gamesRef = useRef<HTMLUListElement | null>(null);
 
   const [playing, setPlaying] = useState(false);
   useEffect(() => {
@@ -38,34 +39,52 @@ const AutoPlayer = () => {
         { win: 0, lose: 0 },
       ),
     );
+    if (gamesRef.current === null) return;
+    gamesRef.current.scrollTop = gamesRef.current.scrollHeight;
   }, [games]);
 
   return (
-    <div>
-      <button
-        disabled={autoTimeoutId !== null}
-        onClick={() => setAlwaysSwitch(!alwaysSwitch)}
-      >
-        Toggle Always Switch
-      </button>
-      <div>{`Always Switch: ${alwaysSwitch ? "On" : "Off"}`}</div>
-      <button
-        disabled={autoTimeoutId !== null}
-        onClick={() => {
-          if (autoTimeoutId !== null) clearTimeout(autoTimeoutId);
-          setGames([]);
-          setPlaying(true);
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-evenly",
+      }}
+    >
+      <div>
+        <button
+          disabled={autoTimeoutId !== null}
+          onClick={() => setAlwaysSwitch(!alwaysSwitch)}
+        >
+          Toggle Always Switch
+        </button>
+        <div>{`Always Switch: ${alwaysSwitch ? "On" : "Off"}`}</div>
+        <button
+          disabled={autoTimeoutId !== null}
+          onClick={() => {
+            if (autoTimeoutId !== null) clearTimeout(autoTimeoutId);
+            setGames([]);
+            setPlaying(true);
+          }}
+        >
+          {`Play ${gameCount} Games`}
+        </button>
+        <div>{`wins: ${winLoss.win} losses: ${winLoss.lose}`}</div>
+      </div>
+      <ul
+        ref={gamesRef}
+        style={{
+          height: "60vh",
+          overflowY: "scroll",
+          border: "2px solid",
+          listStyleType: "none",
         }}
       >
-        {`Play ${gameCount} Games`}
-      </button>
-      <div>{`wins: ${winLoss.win} losses: ${winLoss.lose}`}</div>
-      <ul style={{ height: "60vh", overflowY: "scroll" }}>
         {games?.map((game, i) => (
           <li
             style={{ textAlign: "start" }}
             key={i}
-          >{`prize: ${game.prizeDoor}, chosen: ${game.contestantDoorSelected}, switched: ${game.contestantSwitch}, won: ${game.prizeDoor === montyHallGetContestantDoorChoice(game)}`}</li>
+          >{`#${i + 1} prize behind door ${game.prizeDoor}, contestant chose door ${game.contestantDoorSelected}, contestant ${alwaysSwitch ? `switched to door ${montyHallGetContestantDoorChoice(game)}` : `stayed with door ${game.contestantDoorSelected}`}, ${game.prizeDoor === montyHallGetContestantDoorChoice(game) ? "won!" : "lost."}`}</li>
         ))}
       </ul>
     </div>
