@@ -11,7 +11,7 @@ import {
 
 const Game = () => {
   const [montyHall, setMontyHall] = useState(montyHallGetInit());
-  const { step, prizeDoor } = montyHall;
+  const { step, prizeDoor, doorHostRevealed, contestantSwitch } = montyHall;
   const contestantDoorSelected = montyHallGetContestantDoorChoice(montyHall);
   let stepElements: ReactNode = null;
   let msg = "";
@@ -25,9 +25,11 @@ const Game = () => {
     );
   }
   if (step === GAME_STEPS.CONTESTANT_SWITCH)
-    msg = "Stay with your original choice? Or choose the other door?";
+    msg = `The host revealed door ${doorHostRevealed} was empty. Stay with your original choice or choose the other door?`;
   if (step === GAME_STEPS.DRAMATIC_REVEAL) {
-    msg = "Did you make the right choice?";
+    msg = contestantSwitch
+      ? "You chose the other door."
+      : "You stayed with your original choice.";
     stepElements = (
       <button onClick={() => setMontyHall(montyHallReveal(montyHall))}>
         Show me the prize!
