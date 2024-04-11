@@ -23,7 +23,7 @@ export const GAME_STEPS: GameSteps = {
 };
 
 /*
-  Infer what step we're on (contestant choosing door, host revelaing door...) by null values of
+  Infer what step we're on (contestant choosing door, host revealing door...) by null values of
   values in game state.
   */
 export interface MontyHall {
