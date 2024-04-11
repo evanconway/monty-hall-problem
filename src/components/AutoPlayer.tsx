@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   MontyHall,
   montyHallGetContestantDoorChoice,
@@ -10,23 +10,6 @@ const AutoPlayer = () => {
   const [games, setGames] = useState<MontyHall[]>([]); // boolean indicates game won
   const [winLoss, setWinLoss] = useState({ win: 0, lose: 0 });
   const [alwaysSwitch, setAlwaysSwitch] = useState(true);
-  const [autoTimeoutId, setAutoTimeoutId] = useState<number | null>(null);
-  const gamesRef = useRef<HTMLUListElement | null>(null);
-
-  const [playing, setPlaying] = useState(false);
-  useEffect(() => {
-    if (playing === false) return;
-    if (games.length >= gameCount) {
-      setPlaying(false);
-      setAutoTimeoutId(null);
-      return;
-    }
-    setAutoTimeoutId(
-      setTimeout(() => {
-        setGames([...games, montyHallGetPlayedGame(alwaysSwitch)]);
-      }),
-    );
-  }, [playing, games, alwaysSwitch, setAutoTimeoutId]);
 
   useEffect(() => {
     setWinLoss(
@@ -39,8 +22,6 @@ const AutoPlayer = () => {
         { win: 0, lose: 0 },
       ),
     );
-    if (gamesRef.current === null) return;
-    gamesRef.current.scrollTop = gamesRef.current.scrollHeight;
   }, [games]);
 
   return (
@@ -52,19 +33,17 @@ const AutoPlayer = () => {
       }}
     >
       <div style={{ width: "25%" }}>
-        <button
-          disabled={autoTimeoutId !== null}
-          onClick={() => setAlwaysSwitch(!alwaysSwitch)}
-        >
+        <button onClick={() => setAlwaysSwitch(!alwaysSwitch)}>
           Toggle Always Switch
         </button>
         <div>{`Always Switch: ${alwaysSwitch ? "On" : "Off"}`}</div>
         <button
-          disabled={autoTimeoutId !== null}
           onClick={() => {
-            if (autoTimeoutId !== null) clearTimeout(autoTimeoutId);
-            setGames([]);
-            setPlaying(true);
+            setGames(
+              [...new Array(gameCount)].map(() =>
+                montyHallGetPlayedGame(alwaysSwitch),
+              ),
+            );
           }}
         >
           {`Play ${gameCount} Games`}
@@ -72,12 +51,11 @@ const AutoPlayer = () => {
         <div>{`wins: ${winLoss.win} losses: ${winLoss.lose}`}</div>
       </div>
       <ul
-        ref={gamesRef}
         style={{
           width: "60%",
           height: "60vh",
           overflowY: "scroll",
-          border: `2px solid`,
+          border: `0.25em solid`,
           listStyleType: "none",
           padding: "1em",
         }}

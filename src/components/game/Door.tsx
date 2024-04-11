@@ -30,7 +30,7 @@ const Door = ({ montyHall, setMontyHall, doorNumber }: DoorProps) => {
       </div>
       <div
         style={{
-          border: `2px ${selected ? "red" : ""} solid`,
+          border: `0.25em ${selected ? "red" : ""} solid`,
           width: "90px",
           height: "200px",
           display: "flex",
