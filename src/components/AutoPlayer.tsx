@@ -36,7 +36,10 @@ const AutoPlayer = () => {
         <button onClick={() => setAlwaysSwitch(!alwaysSwitch)}>
           Toggle Always Switch
         </button>
-        <div>{`Always Switch: ${alwaysSwitch ? "On" : "Off"}`}</div>
+        <div>
+          {alwaysSwitch ? "switch to other door" : "stay with original choice"}
+        </div>
+        <br />
         <button
           onClick={() => {
             setGames(
