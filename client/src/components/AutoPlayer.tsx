@@ -60,16 +60,14 @@ const AutoPlayer = () => {
         {`Play ${gameCount} Games`}
       </button>
       <div>{`wins: ${winLoss.win} losses: ${winLoss.lose}`}</div>
-      <div style={{ height: "60vh", overflowY: "scroll" }}>
-        <ul>
-          {games?.map((game, i) => (
-            <li
-              style={{ textAlign: "start" }}
-              key={i}
-            >{`prize: ${game.prizeDoor}, chosen: ${game.contestantDoorSelected}, switched: ${game.contestantSwitch}, won: ${game.prizeDoor === montyHallGetContestantDoorChoice(game)}`}</li>
-          ))}
-        </ul>
-      </div>
+      <ul style={{ height: "60vh", overflowY: "scroll" }}>
+        {games?.map((game, i) => (
+          <li
+            style={{ textAlign: "start" }}
+            key={i}
+          >{`prize: ${game.prizeDoor}, chosen: ${game.contestantDoorSelected}, switched: ${game.contestantSwitch}, won: ${game.prizeDoor === montyHallGetContestantDoorChoice(game)}`}</li>
+        ))}
+      </ul>
     </div>
   );
 };
