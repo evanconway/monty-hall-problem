@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   contestantChooseDoor,
   contestantDecideSwitch,
@@ -17,7 +17,6 @@ const AutoPlayer = () => {
 
   const playGamesAuto = () => {
     const timer = 500;
-    setPlaying(true);
     const randomChoice = getRandomPrizeDoor();
     dispatch(contestantChooseDoor(randomChoice));
     setTimeout(() => {
@@ -35,13 +34,22 @@ const AutoPlayer = () => {
     }, timer);
   };
 
+  useEffect(() => {
+    if (playing) playGamesAuto();
+  }, [playing]);
+
   return (
     <div>
       <button onClick={() => setAlwaysSwitch(!alwaysSwitch)}>
         Toggle Always Switch
       </button>
       <div>{`Always Switch: ${alwaysSwitch ? "On" : "Off"}`}</div>
-      <button disabled={playing} onClick={playGamesAuto}>
+      <button
+        disabled={playing}
+        onClick={() => {
+          setPlaying(true);
+        }}
+      >
         Play 1000 games
       </button>
     </div>
