@@ -35,10 +35,11 @@ function App() {
           There is an optimal choice. Switching doors has a greater probability
           of finding the prize than staying with your original choice. But it's
           hard to understand why. So instead of trying to explain it, let's see
-          it play out. Below is the game again, but this time with the option to
-          play 1000 games instantly! Your initial door choice will be random,
-          but you can decide whether to always stay with your original choice,
-          or switch to the other available door.
+          it play out. Below is the game again but this time with the option to
+          play 1000 games instantly! Your initial door choice will be random.
+          You decide whether to always stay with your original choice or switch
+          to the other available door. Play games and see for yourself which
+          option wins more often.
         </p>
       </section>
       <AutoPlayer />

@@ -24,6 +24,10 @@ const AutoPlayer = () => {
     );
   }, [games]);
 
+  useEffect(() => {
+    setGames([]);
+  }, [alwaysSwitch, setGames]);
+
   return (
     <div
       style={{
@@ -33,13 +37,6 @@ const AutoPlayer = () => {
       }}
     >
       <div style={{ width: "25%" }}>
-        <button onClick={() => setAlwaysSwitch(!alwaysSwitch)}>
-          Toggle Always Switch
-        </button>
-        <div>
-          {alwaysSwitch ? "switch to other door" : "stay with original choice"}
-        </div>
-        <br />
         <button
           onClick={() => {
             setGames(
@@ -52,6 +49,13 @@ const AutoPlayer = () => {
           {`Play ${gameCount} Games`}
         </button>
         <div>{`wins: ${winLoss.win} losses: ${winLoss.lose}`}</div>
+        <br />
+        <button onClick={() => setAlwaysSwitch(!alwaysSwitch)}>
+          Toggle Always Switch
+        </button>
+        <div>
+          {alwaysSwitch ? "switch to other door" : "stay with first choice"}
+        </div>
       </div>
       <ul
         style={{

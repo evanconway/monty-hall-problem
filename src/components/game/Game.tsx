@@ -27,9 +27,10 @@ const Game = () => {
   if (step === GAME_STEPS.CONTESTANT_SWITCH)
     msg = `The host revealed door ${doorHostRevealed} was empty. Stay with your original choice or choose the other door?`;
   if (step === GAME_STEPS.DRAMATIC_REVEAL) {
-    msg = contestantSwitch
-      ? "You chose the other door."
-      : "You stayed with your original choice.";
+    msg =
+      (contestantSwitch
+        ? "You chose the other door."
+        : "You stayed with your original choice.") + " Was it correct?";
     stepElements = (
       <button onClick={() => setMontyHall(montyHallReveal(montyHall))}>
         Show me the prize!
@@ -45,7 +46,7 @@ const Game = () => {
     );
   }
   return (
-    <div>
+    <div style={{ paddingBottom: "2em" }}>
       <div style={{ minHeight: "60px" }}>
         <p>{msg}</p>
         {stepElements}
