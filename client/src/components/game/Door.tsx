@@ -1,34 +1,27 @@
 import {
-  GAME_STEPS,
+  MontyHall,
   PrizeDoor,
-  contestantChooseDoor,
-  contestantDecideSwitch,
-  selectContestantDoorSelected,
-  selectGameStep,
-  selectHostDoorRevealed,
-  selectPrizeDoor,
-} from "../../state/gameSlice";
-import { useAppDispatch, useAppSelector } from "../../state/hooks";
+  montyHallContestantChooseDoor,
+  montyHallContestantSwitch,
+  montyHallGetContestantDoorChoice,
+} from "../../montyHall";
+import { GAME_STEPS } from "../../state/gameSlice";
 
 interface DoorProps {
+  montyHall: MontyHall;
+  setMontyHall: Function;
   doorNumber: PrizeDoor;
 }
 
-const Door = ({ doorNumber }: DoorProps) => {
-  const dispatch = useAppDispatch();
-
-  const prizeDoor = useAppSelector(selectPrizeDoor);
-  const gameStep = useAppSelector(selectGameStep);
-  const contestantSelected = useAppSelector(selectContestantDoorSelected);
-  const hostRevealed = useAppSelector(selectHostDoorRevealed);
-  const selected = doorNumber === contestantSelected;
-
+const Door = ({ montyHall, setMontyHall, doorNumber }: DoorProps) => {
+  const { step, prizeDoor, doorHostRevealed } = montyHall;
+  const contestantDoorSelected = montyHallGetContestantDoorChoice(montyHall);
+  const selected = doorNumber === contestantDoorSelected;
   const chooseEnabled =
-    gameStep === GAME_STEPS.CONTESTANT_CHOOSE ||
-    (gameStep === GAME_STEPS.CONTESTANT_SWITCH && doorNumber !== hostRevealed);
-
+    step === GAME_STEPS.CONTESTANT_CHOOSE ||
+    (step === GAME_STEPS.CONTESTANT_SWITCH && doorNumber !== doorHostRevealed);
   const isRevealed =
-    gameStep === GAME_STEPS.DONE || hostRevealed === doorNumber;
+    step === GAME_STEPS.DONE || doorHostRevealed === doorNumber;
 
   return (
     <div
@@ -45,11 +38,16 @@ const Door = ({ doorNumber }: DoorProps) => {
       <button
         disabled={!chooseEnabled}
         onClick={() => {
-          if (gameStep === GAME_STEPS.CONTESTANT_CHOOSE) {
-            dispatch(contestantChooseDoor(doorNumber));
+          if (step === GAME_STEPS.CONTESTANT_CHOOSE) {
+            setMontyHall(montyHallContestantChooseDoor(montyHall, doorNumber));
           }
-          if (gameStep === GAME_STEPS.CONTESTANT_SWITCH) {
-            dispatch(contestantDecideSwitch(doorNumber !== contestantSelected));
+          if (step === GAME_STEPS.CONTESTANT_SWITCH) {
+            setMontyHall(
+              montyHallContestantSwitch(
+                montyHall,
+                doorNumber !== contestantDoorSelected,
+              ),
+            );
           }
         }}
       >

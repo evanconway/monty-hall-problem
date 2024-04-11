@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import {
   contestantChooseDoor,
   contestantDecideSwitch,
-  getRandomPrizeDoor,
   hostRevealDoor,
   newGame,
   reveal,
 } from "../state/gameSlice";
 import { useAppDispatch } from "../state/hooks";
+import { getRandomPrizeDoor } from "../montyHall";
 
 const AutoPlayer = () => {
   const dispatch = useAppDispatch();

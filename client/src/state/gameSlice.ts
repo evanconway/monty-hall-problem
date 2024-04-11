@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "./store";
-
-export type PrizeDoor = 1 | 2 | 3;
+import { getRandomPrizeDoor, PrizeDoor } from "../montyHall";
 
 type GameStep = 0 | 1 | 2 | 3 | 4;
 
@@ -14,10 +13,6 @@ export const GAME_STEPS = {
 };
 
 const doorOptions = [1, 2, 3] as PrizeDoor[];
-
-export const getRandomPrizeDoor = () => {
-  return (Math.floor(Math.random() * 3) + 1) as PrizeDoor;
-};
 
 /*
 Infer what step we're on (contestant choosing door, host revelaing door...) by null values of

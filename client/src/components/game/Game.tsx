@@ -1,47 +1,45 @@
-import { ReactNode } from "react";
-import {
-  selectGameStep,
-  GAME_STEPS,
-  hostRevealDoor,
-  reveal,
-  newGame,
-  selectContestantDoorSelected,
-  selectPrizeDoor,
-} from "../../state/gameSlice";
-import { useAppDispatch, useAppSelector } from "../../state/hooks";
+import { ReactNode, useState } from "react";
+import { GAME_STEPS } from "../../state/gameSlice";
 import Door from "./Door";
+import {
+  DOOR_OPTIONS,
+  montyHallGetContestantDoorChoice,
+  montyHallGetInit,
+  montyHallHostRevealDoor,
+  montyHallReveal,
+} from "../../montyHall";
 
 const Game = () => {
-  const dispatch = useAppDispatch();
-
-  const gameStep = useAppSelector(selectGameStep);
-  const contestantDoorSelect = useAppSelector(selectContestantDoorSelected);
-  const prizeDoor = useAppSelector(selectPrizeDoor);
-
+  const [montyHall, setMontyHall] = useState(montyHallGetInit());
+  const { step, prizeDoor } = montyHall;
+  const contestantDoorSelected = montyHallGetContestantDoorChoice(montyHall);
   let stepElements: ReactNode = null;
-
   let msg = "";
-  if (gameStep === GAME_STEPS.CONTESTANT_CHOOSE) msg = "Choose a door...";
-  if (gameStep === GAME_STEPS.HOST_REVEAL) {
+  if (step === GAME_STEPS.CONTESTANT_CHOOSE) msg = "Choose a door...";
+  if (step === GAME_STEPS.HOST_REVEAL) {
     msg = "The host will reveal a non-prize door.";
     stepElements = (
-      <button onClick={() => dispatch(hostRevealDoor())}>
+      <button onClick={() => setMontyHall(montyHallHostRevealDoor(montyHall))}>
         Reveal The Door
       </button>
     );
   }
-  if (gameStep === GAME_STEPS.CONTESTANT_SWITCH)
+  if (step === GAME_STEPS.CONTESTANT_SWITCH)
     msg = "Stay with your original choice? Or choose the other door?";
-  if (gameStep === GAME_STEPS.DRAMATIC_REVEAL) {
+  if (step === GAME_STEPS.DRAMATIC_REVEAL) {
     msg = "Did you make the right choice?";
     stepElements = (
-      <button onClick={() => dispatch(reveal())}>Show me the prize!</button>
+      <button onClick={() => setMontyHall(montyHallReveal(montyHall))}>
+        Show me the prize!
+      </button>
     );
   }
-  if (gameStep === GAME_STEPS.DONE) {
-    msg = `The game is over. ${prizeDoor === contestantDoorSelect ? "You won!" : "You lost."}`;
+  if (step === GAME_STEPS.DONE) {
+    msg = `The game is over. ${prizeDoor === contestantDoorSelected ? "You won!" : "You lost."}`;
     stepElements = (
-      <button onClick={() => dispatch(newGame())}>Play Again?</button>
+      <button onClick={() => setMontyHall(montyHallGetInit())}>
+        Play Again?
+      </button>
     );
   }
   return (
@@ -51,9 +49,14 @@ const Game = () => {
         {stepElements}
       </div>
       <div style={{ display: "flex", justifyContent: "center" }}>
-        <Door doorNumber={1} />
-        <Door doorNumber={2} />
-        <Door doorNumber={3} />
+        {DOOR_OPTIONS.map((o) => (
+          <Door
+            montyHall={montyHall}
+            setMontyHall={setMontyHall}
+            doorNumber={o}
+            key={o}
+          />
+        ))}
       </div>
     </div>
   );
