@@ -1,11 +1,11 @@
 import {
+  GAME_STEPS,
   MontyHall,
   PrizeDoor,
   montyHallContestantChooseDoor,
   montyHallContestantSwitch,
   montyHallGetContestantDoorChoice,
 } from "../../montyHall";
-import { GAME_STEPS } from "../../state/gameSlice";
 
 interface DoorProps {
   montyHall: MontyHall;

@@ -6,7 +6,7 @@ function App() {
     <div style={{ maxWidth: "800px", margin: "0 auto" }}>
       <h1>To Switch Or Not To Switch?</h1>
       <section>
-        <h2>The problem</h2>
+        <h2>The Problem</h2>
         <p>
           The Monty Hall problem comes from a game show. The contestant is shown
           3 doors. Behind one is a prize. Behind the others are duds . First the

@@ -1,8 +1,8 @@
 import { ReactNode, useState } from "react";
-import { GAME_STEPS } from "../../state/gameSlice";
 import Door from "./Door";
 import {
   DOOR_OPTIONS,
+  GAME_STEPS,
   montyHallGetContestantDoorChoice,
   montyHallGetInit,
   montyHallHostRevealDoor,
