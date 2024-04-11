@@ -38,7 +38,6 @@ function App() {
         </p>
       </section>
       <AutoPlayer />
-      <Game />
     </div>
   );
 }

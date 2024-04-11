@@ -87,8 +87,8 @@ export const montyHallGetContestantDoorChoice = (mh: MontyHall) => {
   if (mh.contestantSwitch === null) return mh.contestantDoorSelected;
   const remainingOption = DOOR_OPTIONS.find((o) => {
     if (o === mh.doorHostRevealed) return false;
-    if (mh.contestantSwitch && o === mh.contestantDoorSelected) return false;
-    else return true;
+    if (mh.contestantSwitch) return o !== mh.contestantDoorSelected;
+    else return o === mh.contestantDoorSelected;
   });
   if (remainingOption === undefined)
     throw new Error(
@@ -101,4 +101,12 @@ export const montyHallReveal = (mh: MontyHall) => {
   if (mh.step !== GAME_STEPS.DRAMATIC_REVEAL)
     throw new Error("MontyHall must be at step 3 to reveal outcome");
   return { ...mh, step: mh.step + 1, reveal: true } as MontyHall;
+};
+
+export const montyHallGetPlayedGame = (switchOnReveal: boolean) => {
+  const mh = montyHallGetInit();
+  const choose = montyHallContestantChooseDoor(mh, getRandomPrizeDoor());
+  const hostRevealed = montyHallHostRevealDoor(choose);
+  const chooseSwitch = montyHallContestantSwitch(hostRevealed, switchOnReveal);
+  return montyHallReveal(chooseSwitch);
 };

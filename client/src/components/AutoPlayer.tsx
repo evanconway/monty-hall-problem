@@ -1,42 +1,28 @@
 import { useEffect, useState } from "react";
 import {
-  contestantChooseDoor,
-  contestantDecideSwitch,
-  hostRevealDoor,
-  newGame,
-  reveal,
-} from "../state/gameSlice";
-import { useAppDispatch } from "../state/hooks";
-import { getRandomPrizeDoor } from "../montyHall";
+  MontyHall,
+  montyHallGetContestantDoorChoice,
+  montyHallGetPlayedGame,
+} from "../montyHall";
 
 const AutoPlayer = () => {
-  const dispatch = useAppDispatch();
-  const [playing, setPlaying] = useState(false);
-  const [results, setResults] = useState<boolean[]>([]); // boolean indicates game won
+  const gameCount = 1000;
+  const [games, setGames] = useState<MontyHall[]>([]); // boolean indicates game won
+  const [winLoss, setWinLoss] = useState({ win: 0, lose: 0 });
   const [alwaysSwitch, setAlwaysSwitch] = useState(true);
 
-  const playGamesAuto = () => {
-    const timer = 500;
-    const randomChoice = getRandomPrizeDoor();
-    dispatch(contestantChooseDoor(randomChoice));
-    setTimeout(() => {
-      dispatch(hostRevealDoor());
-      setTimeout(() => {
-        dispatch(contestantDecideSwitch(alwaysSwitch));
-        setTimeout(() => {
-          dispatch(reveal());
-          setTimeout(() => {
-            dispatch(newGame());
-            setPlaying(false);
-          }, timer);
-        }, timer);
-      }, timer);
-    }, timer);
-  };
-
   useEffect(() => {
-    if (playing) playGamesAuto();
-  }, [playing]);
+    setWinLoss(
+      games.reduce(
+        (prev, current) => {
+          if (current.prizeDoor === montyHallGetContestantDoorChoice(current)) {
+            return { ...prev, win: prev.win + 1 };
+          } else return { ...prev, lose: prev.lose + 1 };
+        },
+        { win: 0, lose: 0 },
+      ),
+    );
+  }, [games]);
 
   return (
     <div>
@@ -45,13 +31,25 @@ const AutoPlayer = () => {
       </button>
       <div>{`Always Switch: ${alwaysSwitch ? "On" : "Off"}`}</div>
       <button
-        disabled={playing}
         onClick={() => {
-          setPlaying(true);
+          setGames(
+            [...new Array(gameCount)].map(() =>
+              montyHallGetPlayedGame(alwaysSwitch),
+            ),
+          );
         }}
       >
-        Play 1000 games
+        {`Play ${gameCount} Games`}
       </button>
+      <div>{`wins: ${winLoss.win} losses: ${winLoss.lose}`}</div>
+      <ul>
+        {games?.map((game, i) => (
+          <li
+            style={{ textAlign: "start" }}
+            key={i}
+          >{`prize: ${game.prizeDoor}, chosen: ${game.contestantDoorSelected} switched: ${game.contestantSwitch} won: ${game.prizeDoor === montyHallGetContestantDoorChoice(game)}`}</li>
+        ))}
+      </ul>
     </div>
   );
 };
