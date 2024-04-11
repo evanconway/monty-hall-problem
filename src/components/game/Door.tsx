@@ -24,35 +24,49 @@ const Door = ({ montyHall, setMontyHall, doorNumber }: DoorProps) => {
     step === GAME_STEPS.DONE || doorHostRevealed === doorNumber;
 
   return (
-    <div
-      style={{
-        border: `2px ${selected ? "red" : ""} solid`,
-        padding: "2em",
-        margin: "2em",
-      }}
-    >
-      <div style={{ fontSize: "4em" }}>{doorNumber}</div>
-      <div style={{ fontSize: "5em" }}>
-        {isRevealed ? (prizeDoor === doorNumber ? "$" : ".") : "?"}
+    <div>
+      <div style={{ height: "20px" }}>
+        {selected ? `chose ${doorNumber}` : ""}
       </div>
-      <button
-        disabled={!chooseEnabled}
-        onClick={() => {
-          if (step === GAME_STEPS.CONTESTANT_CHOOSE) {
-            setMontyHall(montyHallContestantChooseDoor(montyHall, doorNumber));
-          }
-          if (step === GAME_STEPS.CONTESTANT_SWITCH) {
-            setMontyHall(
-              montyHallContestantSwitch(
-                montyHall,
-                doorNumber !== contestantDoorSelected,
-              ),
-            );
-          }
+      <div
+        style={{
+          border: `2px ${selected ? "red" : ""} solid`,
+          width: "90px",
+          height: "200px",
+          display: "flex",
+          paddingBottom: "1em",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          alignItems: "center",
         }}
       >
-        choose
-      </button>
+        <div style={{ fontSize: "4em" }}>{doorNumber}</div>
+        {isRevealed ? (
+          <div>{prizeDoor === doorNumber ? "The Prize!" : "(empty)"}</div>
+        ) : (
+          <div style={{ fontSize: "5em" }}>?</div>
+        )}
+        <button
+          disabled={!chooseEnabled}
+          onClick={() => {
+            if (step === GAME_STEPS.CONTESTANT_CHOOSE) {
+              setMontyHall(
+                montyHallContestantChooseDoor(montyHall, doorNumber),
+              );
+            }
+            if (step === GAME_STEPS.CONTESTANT_SWITCH) {
+              setMontyHall(
+                montyHallContestantSwitch(
+                  montyHall,
+                  doorNumber !== contestantDoorSelected,
+                ),
+              );
+            }
+          }}
+        >
+          choose
+        </button>
+      </div>
     </div>
   );
 };

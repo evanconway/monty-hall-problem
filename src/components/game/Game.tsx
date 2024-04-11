@@ -48,7 +48,7 @@ const Game = () => {
         <p>{msg}</p>
         {stepElements}
       </div>
-      <div style={{ display: "flex", justifyContent: "center" }}>
+      <div style={{ display: "flex", justifyContent: "space-evenly" }}>
         {DOOR_OPTIONS.map((o) => (
           <Door
             montyHall={montyHall}

@@ -48,10 +48,10 @@ const AutoPlayer = () => {
       style={{
         display: "flex",
         flexDirection: "row",
-        justifyContent: "space-evenly",
+        justifyContent: "space-between",
       }}
     >
-      <div>
+      <div style={{ width: "25%" }}>
         <button
           disabled={autoTimeoutId !== null}
           onClick={() => setAlwaysSwitch(!alwaysSwitch)}
@@ -74,18 +74,33 @@ const AutoPlayer = () => {
       <ul
         ref={gamesRef}
         style={{
+          width: "60%",
           height: "60vh",
           overflowY: "scroll",
-          border: "2px solid",
+          border: `2px solid`,
           listStyleType: "none",
+          padding: "1em",
         }}
       >
-        {games?.map((game, i) => (
-          <li
-            style={{ textAlign: "start" }}
-            key={i}
-          >{`#${i + 1} prize behind door ${game.prizeDoor}, contestant chose door ${game.contestantDoorSelected}, contestant ${alwaysSwitch ? `switched to door ${montyHallGetContestantDoorChoice(game)}` : `stayed with door ${game.contestantDoorSelected}`}, ${game.prizeDoor === montyHallGetContestantDoorChoice(game) ? "won!" : "lost."}`}</li>
-        ))}
+        {games.length <= 0 ? (
+          <div>No games played yet.</div>
+        ) : (
+          games.map((game, i) => (
+            <li key={i}>
+              <div>{`#${i + 1}`}</div>
+              <div>{`contestant chose door ${game.contestantDoorSelected}`}</div>
+              <div>{`host revealed door ${game.doorHostRevealed} was empty`}</div>
+              <div>{`contestant ${game.contestantSwitch ? `switched to door ${montyHallGetContestantDoorChoice(game)}` : `stayed with door ${game.contestantDoorSelected}`}`}</div>
+              <div>{`prize was behind door ${game.prizeDoor}`}</div>
+              <div>
+                {game.prizeDoor === montyHallGetContestantDoorChoice(game)
+                  ? "won!"
+                  : "lost"}
+              </div>
+              <br />
+            </li>
+          ))
+        )}
       </ul>
     </div>
   );
