@@ -36,7 +36,7 @@ const AutoPlayer = () => {
         justifyContent: "space-between",
       }}
     >
-      <div style={{ width: "25%" }}>
+      <div style={{ width: "25%", padding: "1em" }}>
         <button
           onClick={() => {
             setGames(

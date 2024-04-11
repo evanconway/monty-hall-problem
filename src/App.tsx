@@ -17,7 +17,7 @@ function App() {
           prize is behind. Then of the remaining 2 doors, the host will open one
           to reveal it is empty. The host knows which door the prize is behind
           and will ALWAYS reveal an empty door. Then the contestant must choose
-          to stay with their original door, or switch to the other closed door.
+          to stay with their original door or switch to the other closed door.
           Is there an optimal choice and which is it?
         </p>
       </section>
